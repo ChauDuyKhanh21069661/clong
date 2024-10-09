@@ -37,21 +37,12 @@ class JsonDBCauLongPipeline:
 
 class CSVDBCauLongPipeline:
     def process_item(self, item, spider):
-        with open('caulong.csv', 'a', encoding='utf-8', newline='') as file:
-            writer = csv.writer(file, delimiter=',')
-            writer.writerow([
-                item['ma'],
-                item['tensp'],
-                item['gia'],
-                item['thuongHieu'],
-                item['tinhTrang'],
-                item['trinhDo'],
-                item['noiDung'],
-                item['phongCach'],
-                item['doCung'],
-                item['diemCanBang'],
-                item['trongLuong'],
-                item['thongTin']
-            ])
+        with open('caulong.csv', 'a', encoding='utf-8', newline='') as csvfile:
+            fieldnames = ['ma','tensp','gia','thuongHieu','courseUrl','tinhTrang','trinhDo','noiDung','phongCach','doCung','diemCanBang','trongLuong','thongTin']
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter=',')
+            # Kiểm tra nếu file CSV chưa có header thì ghi header
+            if csvfile.tell() == 0:
+                writer.writeheader()
+            writer.writerow(item)
         return item
     pass
